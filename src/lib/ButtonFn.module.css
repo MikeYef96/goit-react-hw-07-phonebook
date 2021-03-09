@@ -1,0 +1,15 @@
+.btn {
+  width: fit-content;
+  height: 30px;
+  border-radius: 4px;
+  margin: 0 auto 15px 10px;
+  color: #fff;
+  background-color: #3e77f3;
+  border: none;
+  outline: none;
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: #3158ad;
+}

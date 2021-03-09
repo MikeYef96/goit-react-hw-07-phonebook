@@ -1,0 +1,22 @@
+ul {
+  max-width: 630px;
+}
+
+.contactListItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 200px;
+  font-weight: 700;
+  list-style: none;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  background-color: #9cc7f1;
+  border-radius: 4px;
+}
+
+.listItemContainer {
+  margin-left: 10px;
+  margin-right: 10px;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import css from './InputFn.module.css';
 
-export function InputFn({
+export default function InputFn({
   titleNameInput,
   type,
   placeholder,

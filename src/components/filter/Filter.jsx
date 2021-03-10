@@ -1,23 +1,33 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeFilter } from '../../redux/actions';
-import { InputFn } from '../../lib/InputFn';
+import { getFilter } from '../../redux/selectors';
+import * as contactsActions from '../../redux/actions';
 
-export function Filter() {
-  const filter = useSelector(state => state.filter);
-  const dispatch = useDispatch;
+import PropTypes from 'prop-types';
+import InputFn from '../../lib/InputFn';
 
-  const handleChangeFilter = evt => dispatch(changeFilter(evt.target.value));
+const Filter = () => {
+  const value = useSelector(getFilter);
+  const dispatch = useDispatch();
 
   return (
-    <>
+    <label>
       <InputFn
-        value={filter}
+        value={value}
         type="text"
         placeholder="Enter contact name"
-        onChange={handleChangeFilter}
+        onChange={evt =>
+          dispatch(contactsActions.changeFilter(evt.target.value))
+        }
         titleNameInput="Find contact by name:"
       />
-    </>
+    </label>
   );
-}
+};
+
+Filter.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+};
+
+export default Filter;

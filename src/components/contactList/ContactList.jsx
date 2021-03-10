@@ -1,50 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/actions';
-import { Filter } from '../filter/Filter';
-import { ButtonFn } from '../../lib/ButtonFn';
+import contactsOperations from '../../redux/operations';
+import { getVisibleContacts } from '../../redux/selectors';
+
+import ButtonFn from '../../lib/ButtonFn';
 import css from './ContactList.module.css';
 
-export function ContactList({
-  onDeleteContact,
-  length,
-  value,
-  onChangeFilter,
-}) {
-  const { contacts, filter } = useSelector(state => state);
+export default function ContactList() {
   const dispatch = useDispatch();
 
-  onDeleteContact = id => dispatch(deleteContact(id));
+  useEffect(() => {
+    dispatch(contactsOperations.fetchContacts());
+  }, [dispatch]);
 
-  const filteredContacts = (contacts, filter) => {
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase()),
-    );
-  };
+  const contacts = useSelector(getVisibleContacts);
 
-  const filterContacts = filteredContacts(contacts, filter);
+  const onDeleteContact = id => dispatch(contactsOperations.deleteContact(id));
 
   return (
-    <>
-      <h2>Contacts</h2>
-      {length > 0 && <Filter value={value} onChangeFilter={onChangeFilter} />}
-      <ul>
-        {filterContacts.map(({ id, name, number }) => (
-          <li className={css.contactListItem} key={id}>
-            <div className={css.listItemContainer}>
-              <p>
-                {name}: <span>{number}</span>
-              </p>
-
-              <ButtonFn
-                name="delete"
-                type="button"
-                onClick={evt => onDeleteContact(id)}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul>
+      {contacts.map(({ id, name, number }) => (
+        <li className={css.contactListItem} key={id}>
+          <div className={css.listItemContainer}>
+            <span>{name}:</span>
+            <span>{number}</span>
+            <ButtonFn
+              name="Delete"
+              type="button"
+              onClick={() => onDeleteContact(id)}
+            />
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 }
+
+ContactList.propTypes = {
+  onDeleteContact: PropTypes.func,
+  contacts: PropTypes.array,
+  id: PropTypes.string,
+  name: PropTypes.string,
+  number: PropTypes.string,
+};

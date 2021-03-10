@@ -1,30 +1,22 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-
-import { addContact } from '../../redux/actions';
-import { ContactForm } from '../contactForm/ContactForm';
-import { ContactList } from '../contactList/ContactList';
+import { addContactSuccess } from '../../redux/actions';
+import ContactForm from '../contactForm/ContactForm';
+import Filter from '../filter/Filter';
+import ContactList from '../contactList/ContactList';
 import css from './Phonebook.module.css';
 
-function Phonebook({ contacts }) {
+export default function Phonebook({ contacts }) {
   useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   return (
-    <React.Fragment>
-      <div className={css.container}>
-        <ContactForm onAddContact={addContact} />
-        <ContactList />
-      </div>
-    </React.Fragment>
+    <div className={css.container}>
+      <h2>Phonebook</h2>
+      <ContactForm onAddContact={addContactSuccess} />
+      <h2>Contacts</h2>
+      <Filter />
+      <ContactList />
+    </div>
   );
 }
-
-const mapStateToProps = state => {
-  return {
-    contacts: state.contacts,
-  };
-};
-
-export default connect(mapStateToProps)(Phonebook);

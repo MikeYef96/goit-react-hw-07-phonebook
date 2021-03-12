@@ -1,4 +1,5 @@
-import { combineReducers, createReducer } from '@reduxjs/toolkit';
+import { combineReducers } from 'redux';
+import { createReducer } from '@reduxjs/toolkit';
 import {
   changeFilter,
   addContactSuccess,
@@ -9,10 +10,12 @@ import {
 const items = createReducer([], {
   [fetchContactsSuccess]: (_, { payload }) => payload,
   [addContactSuccess]: (state, { payload }) => [...state, payload],
-  [deleteContactSuccess]: (state, { payload }) =>
-    state.filter(({ id }) => {
-      return id !== payload;
-    }),
+  [deleteContactSuccess]: (state, { payload }) => {
+    console.log('Payload', payload);
+    return state.filter(
+      contact => contact.id.toString() !== payload.toString(),
+    );
+  },
 });
 
 const filter = createReducer('', {

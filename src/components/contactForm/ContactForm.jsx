@@ -3,7 +3,6 @@ import { v4 as uuid } from 'uuid';
 import { useSelector, useDispatch } from 'react-redux';
 import contactsOperations from '../../redux/operations';
 import { getContacts } from '../../redux/selectors';
-import { useForm } from 'react-hook-form';
 
 import ButtonFn from '../../lib/ButtonFn';
 import InputFn from '../../lib/InputFn';
@@ -14,12 +13,10 @@ export default function ContactForm() {
   const [number, setNumber] = useState('');
 
   const contactNameId = uuid();
-  // const contactNumberId = uuid();
+  const contactNumberId = uuid();
 
-  const contacts = useSelector(getContacts);
   const dispatch = useDispatch();
-
-  const { register, handleSubmit } = useForm();
+  const contacts = useSelector(getContacts);
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -35,15 +32,15 @@ export default function ContactForm() {
     }
   };
 
-  const handleFormSubmit = (data, evt) => {
+  const handleFormSubmit = evt => {
     evt.preventDefault();
-    console.log(data.name);
-    if (contacts.find(contact => contact.name === data.name)) {
-      alert(`${data.name} is already exists!`);
+
+    if (contacts.find(contact => contact.name === name)) {
+      alert(`${name} is already in contacts.`);
       reset();
       return;
     }
-    dispatch(contactsOperations.addContact(data.name, data.number));
+    dispatch(contactsOperations.addContact(name, number));
     reset();
   };
 
@@ -52,30 +49,32 @@ export default function ContactForm() {
     setNumber('');
   };
   return (
-    <form className={css.form} onSubmit={handleSubmit(handleFormSubmit)}>
-      <InputFn
-        className={css.inputName}
-        name="name"
-        titleNameInput="Name"
-        type="text"
-        placeholder="Enter name"
-        value={name}
-        onChange={handleChange}
-        id={contactNameId}
-        ref={register}
-        required
-      />
-      <InputFn
-        name="number"
-        titleNameInput="Number"
-        type="tel"
-        placeholder="Enter number"
-        value={number}
-        onChange={handleChange}
-        // id={contactNumberId}
-        ref={register}
-        required
-      />
+    <form className={css.form} onSubmit={handleFormSubmit}>
+      <label htmlFor={contactNameId}>
+        <InputFn
+          className={css.inputName}
+          type="text"
+          name="name"
+          titleNameInput="Name"
+          placeholder="Enter name"
+          value={name}
+          onChange={handleChange}
+          id={contactNameId}
+          required
+        />
+      </label>
+      <label htmlFor={contactNumberId}>
+        <InputFn
+          type="text"
+          name="number"
+          titleNameInput="Number"
+          placeholder="Enter number"
+          value={number}
+          onChange={handleChange}
+          id={contactNumberId}
+          required
+        />
+      </label>
       <br />
       <ButtonFn name="Add contact" type="submit" />
     </form>
